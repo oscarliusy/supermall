@@ -5,3 +5,13 @@ export const getHomeMultidata=()=>{
     url:'/home/multidata'
   })
 }
+
+export const getHomeGoods = (type,page)=>{
+  return request({
+    url:'/home/data',
+    params:{
+      type,
+      page
+    }
+  })
+}
