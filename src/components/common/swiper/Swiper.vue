@@ -8,7 +8,7 @@
       v-for="item in banner"
       :key="item.image"
       >
-      <img :src="item.image" alt="item.image">
+      <img :src="item.image" alt="item.image" @load="imageLoad">
     </swiper-slide>
     <div class="swiper-pagination" slot="pagination"/>
   </swiper>
@@ -31,7 +31,8 @@ export default {
           disableOnInteraction:false
         },
         spaceBetween:30,
-        loop:true
+        loop:true,
+        isLoad:false,
       }
     }
   },
@@ -58,7 +59,15 @@ export default {
   },
   directives: {
     swiper: directive
-  }
+  },
+  methods:{
+    imageLoad(){
+      if(!this.isLoad){
+        this.$emit('swiperImageLoad')
+        this.isLoad = true
+      }
+    },
+  },
 }
 </script>
 

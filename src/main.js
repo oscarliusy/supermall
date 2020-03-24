@@ -8,6 +8,8 @@ import 'swiper/css/swiper.css'
 Vue.use(VueAwesomeSwiper)
 
 Vue.config.productionTip = false
+//在原型上绑定一个Vue实例作为事件总线
+Vue.prototype.$bus = new Vue()
 
 new Vue({
   router,
