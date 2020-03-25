@@ -1,14 +1,15 @@
 <template>
   <swiper
-    ref="mySwiper"
+    ref="detailSwiper"
     :options="swiperOptions"
+    class="detail-swiper"
   >
     <swiper-slide 
-      class="swiper-slide" 
-      v-for="item in banner"
-      :key="item.image"
+      class="swiper-item" 
+      v-for="item in topImages"
+      :key="item"
       >
-      <img :src="item.image" alt="item.image" @load="imageLoad">
+      <img :src="item" :alt="item" >
     </swiper-slide>
     <div class="swiper-pagination" slot="pagination"/>
   </swiper>
@@ -18,7 +19,7 @@
 import { Swiper, SwiperSlide, directive} from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
 export default {
-  name:'SwiperDemo',
+  name:'DetailSwiper',
   data(){
     return {
       swiperOptions:{
@@ -36,9 +37,9 @@ export default {
       }
     }
   },
-  //这里需要Home传图片链接Array进来
+  //这里Detail传图片链接Array进来
   props:{
-    banner:{
+    topImages:{
       type:Array,
       default(){
         return []
@@ -47,7 +48,7 @@ export default {
   },
   computed: {
     swiper() {
-      return this.$refs.mySwiper.$swiper
+      return this.$refs.detailSwiper.$swiper
     }
   },
   mounted() {
@@ -61,23 +62,18 @@ export default {
     swiper: directive
   },
   methods:{
-    imageLoad(){
-      if(!this.isLoad){
-        this.$emit('swiperImageLoad')
-        this.isLoad = true
-      }
-    },
+
   },
 }
 </script>
 
 <style scoped>
-.swiper-slide {
-  width:414px;
-  height:215px;
+.swiper-item{
+  overflow: hidden;
+  height: 400px;
 }
-img {
-  max-width:100%;
-  max-height: 100%;
+.swiper-item img {
+  width: 100%;
 }
+
 </style>
