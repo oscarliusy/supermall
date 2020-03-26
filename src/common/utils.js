@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 //防抖函数
 const debounce = (func,delay=500) => {
   let timer = null
@@ -11,6 +13,11 @@ const debounce = (func,delay=500) => {
   }
 }
 
+const getDate = (date) =>{
+  moment.locale('zh-cn')
+  return moment(date).format('YYYY-MM-DD HH:mm:ss')
+}
 export {
-  debounce
+  debounce,
+  getDate,
 }

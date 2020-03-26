@@ -34,15 +34,6 @@
     <div>
       <div class="enter-shop">进店逛逛</div>
     </div>
-    <ul>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-    </ul>
   </div>
 </template>
 
