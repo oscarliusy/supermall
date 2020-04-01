@@ -42,7 +42,8 @@ import RecommendView from './childComps/RecommendView'
 import FeatureView from './childComps/FeatureView'
 
 import { getHomeMultidata,getHomeGoods } from '@network/home' 
-import { debounce } from '@common/utils'
+//import { debounce } from '@common/utils'
+import { itemListenerMixin,backTopMixin } from '@common/mixin'
 
 export default {
   name:'Home',
@@ -54,7 +55,7 @@ export default {
     TabControl, 
     GoodsList,
     Scroll,
-    BackTop,
+    // BackTop,
   },
   data(){
     return {
@@ -67,10 +68,11 @@ export default {
         'sell':{page:0,list:[]},
       },
       currentType:'',
-      isShowBackTop:false,
+      // isShowBackTop:false,
       tabOffsetTop:0,
       isTabFixed:false,
       saveY:0,
+      
     }
   },
   created(){
@@ -80,12 +82,9 @@ export default {
     this.initHomeGoods()
   },
   mounted(){
-    //1.监听item中图片加载完成
-    const refresh = debounce(this.imageLoaded,200)
-    this.$bus.$on('itemImageLoad',()=>{
-      refresh()
-    })
+    //以下监听imageLoad的代码被移动至common/mixin：itemListenerMixin
   },
+  mixins:[itemListenerMixin,backTopMixin],
   destroyed(){
     console.log('home destroyed')
   },
@@ -94,7 +93,10 @@ export default {
     this.$refs.scroll.refresh()
   },
   deactivated(){
+    //1.保存Y值
     this.saveY = this.$refs.scroll.getScrollY()
+    //2.取消全局事件的监听
+    this.$bus.$off('itemImageLoad',this.itemImgListener)
   },
   methods:{
     //事件监听相关
@@ -102,8 +104,10 @@ export default {
    
     tabClick(index){
       this.currentType = Object.keys(this.goods)[index]
-      this.$refs.tabControl1.currentIndex = index;
-      this.$refs.tabControl2.currentIndex = index;
+      if(this.$refs.topTabControl !== undefined){
+        this.$refs.tabControl1.currentIndex = index;
+        this.$refs.tabControl2.currentIndex = index;
+      }
     },
     //网络请求相关
     getHomeMultidata(){
@@ -138,9 +142,9 @@ export default {
       })
       this.currentType = Object.keys(this.goods)[0]
     },
-    backClick(){
-      this.$refs.scroll.scrollTo(0,0,500)
-    },
+    // backClick(){
+    //   this.$refs.scroll.scrollTo(0,0,500)
+    // },
     contentScroll(position){
       //1.判断BackTop是否显示
       this.isShowBackTop = position.y < -1000
@@ -152,9 +156,9 @@ export default {
       this.getHomeGoods(this.currentType)
       console.log('上拉加载更多')
     },
-    imageLoaded(){
-      this.$refs.scroll && this.$refs.scroll.refresh()
-    },
+    // imageLoaded(){
+    //   this.$refs.scroll && this.$refs.scroll.refresh()
+    // },
     swiperImageLoad(){
       this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
     }

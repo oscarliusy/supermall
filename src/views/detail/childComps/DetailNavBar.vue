@@ -30,6 +30,8 @@ export default {
   methods:{
     titleClick(index){
       this.currentIndex = index
+      //发送index用于页面滚动
+      this.$emit('titleClick',index)
     },
     backClick(){
       this.$router.back()

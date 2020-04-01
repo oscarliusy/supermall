@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { getDate } from '@common/utils'
+import { getDate,dateFormat } from '@common/utils'
 export default {
   name:'DetailCommentInfo',
   props:{
@@ -38,7 +38,8 @@ export default {
   },
   filters:{
     showDate(date){
-      return getDate(date)
+      //return getDate(date,"YYYY/MM/DD")
+      return dateFormat(date,"yyyy/MM/dd")
     }
   }
 }
