@@ -12,5 +12,19 @@ export default  {
   },
   [mutationTypes.ADD_TO_CART](state,payload){
     state.cartList.push(payload)
+  },
+  [mutationTypes.TOGGLE_CHECKED](state,payload){
+    state.cartList.map(item=>{
+      if(item.iid === payload.iid){
+        item.isChecked = !item.isChecked
+        return item
+      }
+    })
+  },
+  [mutationTypes.ALL_CHECKED](state){
+    state.cartList.map(item => item.isChecked = true)
+  },
+  [mutationTypes.ALL_UNCHECKED](state){
+    state.cartList.map(item => item.isChecked = false)
   }
 }

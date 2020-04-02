@@ -3,5 +3,8 @@
 
 export default {
   ADD_COUNTER:'addCount',
-  ADD_TO_CART:'addToCart'
+  ADD_TO_CART:'addToCart',
+  TOGGLE_CHECKED:'toggleChecked',
+  ALL_CHECKED:'allChecked',
+  ALL_UNCHECKED:'allUnchecked'
 }

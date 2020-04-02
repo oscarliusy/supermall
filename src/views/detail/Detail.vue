@@ -15,6 +15,7 @@
     </scroll>
     <back-top class="back-top" @click.native="backClick" v-show="isShowBackTop"/>
     <detail-bottom-bar class="detail-bottom-bar" @addCart="addToCart" />
+    <!-- <toast :message="message" :show="show" /> -->
   </div>
 </template>
 
@@ -28,6 +29,7 @@ import DetailParamInfo from './childComps/DetailParamInfo'
 import DetailCommentInfo from './childComps/DetailCommentInfo'
 import DetailBottomBar from './childComps/DetailBottomBar'
 import GoodsList from '@components/content/goods/GoodsList'
+// import Toast from '@components/common/toast/Toast'
 
 import Scroll from '@components/common/scroll/Scroll'
 
@@ -35,6 +37,8 @@ import { debounce } from '@common/utils'
 import { itemListenerMixin,backTopMixin } from '@common/mixin'
 
 import { getDetail,getRecommend,Goods,Shop,GoodsParam } from '@network/detail'
+
+import { mapActions } from 'vuex'
 
 export default {
   name:'Detail',
@@ -49,6 +53,7 @@ export default {
     DetailBottomBar,
     GoodsList,
     Scroll,
+    // Toast,
     
   },
   data(){
@@ -64,6 +69,8 @@ export default {
       themeTopYs:[],
       themes:['swiper','params','comment','recommend'],
       getThemeTopY: null,
+      // message:'',
+      // show:false,
     }
   },
   created(){
@@ -132,6 +139,7 @@ export default {
     this.$bus.$off('itemImageLoad',this.itemImgListener)
   },
   methods:{
+    ...mapActions(['addCart']),
     imageLoad(){
       //this.$refs.scroll.refresh()
       this.newRefresh() //newRefresh来自于mixin的混入，实现防抖的复用
@@ -179,9 +187,24 @@ export default {
       product.price = this.goods.realPrice
       product.iid = this.iid
      
-      //2.将商品添加到购物车中
-      //this.$store.commit('addCart',product)
-      this.$store.dispatch('addCart',product)
+      //2.将商品添加到购物车中(1.Promise, 2.mapActions)
+      // this.$store.dispatch('addCart',product)
+      // .then(res=>{
+      //   console.log(res)
+      // })
+      this.addCart(product).then(res=>{
+        // this.show = true
+        // this.message = res
+        // setTimeout(()=>{
+        //   this.show = false
+        //   this.message = ''
+        // },2000)
+
+        //封装后效果
+        this.$toast.show(res,1500)
+        //console.log(this.$toast)
+  
+      })
 
     },
   }
