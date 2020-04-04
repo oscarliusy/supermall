@@ -2,6 +2,7 @@
 node_modules
 /dist
 /src/network
+/test
 
 # local env files
 .env.local
