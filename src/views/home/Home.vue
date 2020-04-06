@@ -84,7 +84,8 @@ export default {
   mounted(){
     //以下监听imageLoad的代码被移动至common/mixin：itemListenerMixin
   },
-  mixins:[itemListenerMixin,backTopMixin],
+  mixins:[itemListenerMixin,backTopMixin],//混入图片加载和回到顶部组件
+
   destroyed(){
     console.log('home destroyed')
   },

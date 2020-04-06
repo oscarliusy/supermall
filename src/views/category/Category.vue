@@ -2,13 +2,12 @@
   <div id="category">
     <category-nav-bar class="category-nav"/>
     <div class="main">
-      <category-vertical-tab-bar class="tab-bar"/>
-      <div class="wrapper" ref="wrapper">
-        <ul class="content">
-          <button @click="btnClick">button</button>
-          <li v-for="item in 100" :key="item">分类列表{{item}}</li>
-        </ul>
-      </div>
+      <category-vertical-tab-bar class="tab-bar" @tabClick="verticalTabClick"/>
+      <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll" 
+      > 
+       <category-list :categorylist="categoryList" ref="categorylist" @imageLoad="imageLoad"/>
+      </scroll>
+      <back-top class="back-top" @click.native="backClick" v-show="isShowBackTop"/>
     </div>
   </div>
 </template>
@@ -16,48 +15,50 @@
 <script>
   import CategoryNavBar from './childComps/CategoryNavBar'
   import CategoryVerticalTabBar from './childComps/CategoryVerticalTabBar'
+  import CategoryList from './childComps/CategoryList'
 
-  import BScroll from 'better-scroll'
+  import Scroll from '@components/common/scroll/Scroll'
+  import BackTop from '@components/content/backTop/BackTop'
   import { getCategoryList } from '@network/category'
+  import { backTopMixin } from '@common/mixin'
 
   export default {
     name:'Category',
     components:{
       CategoryNavBar,
       CategoryVerticalTabBar,
-
+      CategoryList,
+      Scroll,
+      BackTop
     },
     data(){
       return {
-        scroll:null,
+        categoryList:[],
+        tabYs:[]
       }
     },
+    mixins:[backTopMixin],
     created(){
       getCategoryList()
       .then(res=>{
-        console.log(res)
+        //console.log(res)
+        this.categoryList.push(...res.categoryList)
       })
     },
     mounted(){
-      this.scroll = new BScroll(this.$refs.wrapper,{
-        probeType:3,//可监听惯性滚动
-        pullUpLoad:true
-      })
-      // this.scroll.on('scroll',(position)=>{
-      //   console.log(position)
-      // })
-      this.scroll.on('pullingUp',()=>{
-        console.log('upload')
-        setTimeout(()=>{
-          this.scroll.finishPullUp()
-        },2000)
-
-      })
+  
     },
     methods:{
-      btnClick(){
-        console.log('btn click')
+      verticalTabClick(index){
+        this.$refs.scroll.scrollTo(0,-this.tabYs[index],200)
       },
+      contentScroll(position){
+      //1.判断BackTop是否显示
+      this.isShowBackTop = position.y < -1000
+      },
+      imageLoad(tabYs){
+        this.tabYs = tabYs
+      }
     }
   } 
 </script>
@@ -78,13 +79,10 @@
     flex-grow:0;
     flex-shrink: 0;
     width:25%;
-    background-color: pink;
-  }
-  .wrapper {
-    flex:1;
-    width:70%;
     
-    background-color: red;
-    overflow: hidden;
+  }
+ .content {
+    overflow:hidden;
+    position:relative;
   }
 </style>

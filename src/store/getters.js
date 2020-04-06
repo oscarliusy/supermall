@@ -5,8 +5,8 @@ export default {
   cartList(state){
     return state.cartList
   },
-  allChecked(state){
-    let cartLength = state.cartList.length
+  allChecked(state,getters){
+    let cartLength = getters.cartLength
     let checkedLength = state.cartList.filter(item=>item.isChecked).length
     if(cartLength === checkedLength){
       return true
