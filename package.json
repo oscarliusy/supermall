@@ -11,7 +11,7 @@
     "better-scroll": "^1.15.2",
     "core-js": "^3.6.4",
     "fastclick": "^1.0.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "swiper": "^5.3.6",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.0.2",
